@@ -4,6 +4,7 @@
 	"description": "The repository was created for educational purposes, especially for the Node.js Global Mentoring Program [2024 Q1-Q2 GUKKA, BY] in the Learn Digital Platform of EPAM Systems. The main goal of the project is to complete the practical tasks of the program.",
 	"main": "./src/index.js",
 	"scripts": {
+		"dev": "nodemon",
 		"start": "node ./dist/index.js",
 		"lint": "eslint ./src/**",
 		"lint:fix": "eslint ./src/** --fix",
