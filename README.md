@@ -16,3 +16,63 @@ The repository was created for educational purposes, especially for the [Node.js
 - **Deploy and Tools**
 
 Each module has a practical tasks that will be completed in separate branches.
+
+## Installation
+
+1. Clone the repository:
+
+   ```sh
+   git clone https://github.com/artykovdaniyar/node.js-mentoring-program.git
+   ```
+
+2. Navigate into the project directory:
+
+   ```sh
+   cd node.js-mentoring-program
+   ```
+
+3. Install dependencies:
+   ```sh
+   npm install
+   ```
+
+## Launching the Project
+
+1. Start the development server (with hot reload) using nodemon:
+
+   ```sh
+   npm run dev
+   ```
+
+2. Or, start the project in production mode
+
+It should be build first:
+
+```sh
+npm run build
+```
+
+than start:
+
+```sh
+npm start
+```
+
+## Additional Scripts
+
+- Lint the code:
+
+  ```sh
+  npm run lint
+  ```
+
+- Fix linting issues:
+
+  ```sh
+  npm run lint:fix
+  ```
+
+- Build the project (if necessary):
+  ```sh
+  npm run build
+  ```
