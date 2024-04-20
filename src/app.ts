@@ -1,3 +1,4 @@
+import { UserController } from './api/user';
 import express, { Express } from 'express';
 import { Server } from 'http';
 
@@ -6,15 +7,13 @@ export class App {
 	server: Server;
 	port: number;
 
-	constructor() {
+	constructor(private userController: UserController) {
 		this.app = express();
 		this.port = 8000;
 	}
 
 	useRoutes(): void {
-		this.app.get('/', (req, res) => {
-			res.send('Hello World!');
-		});
+		this.app.use('/user', this.userController.router);
 	}
 
 	public async init(): Promise<void> {
