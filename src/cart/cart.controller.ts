@@ -54,6 +54,16 @@ export class CartController extends BaseController {
 				func: this.emptyUserCart,
 				middlewares: [new AuthMiddleware(this.userService)],
 			},
+
+			{
+				path: '/',
+				method: 'post',
+				func: this.checkout,
+				middlewares: [
+					new ValidateMiddleware(cartCheckoutSchema),
+					new AuthMiddleware(this.userService),
+				],
+			},
 		]);
 	}
 
@@ -105,6 +115,24 @@ export class CartController extends BaseController {
 			this.ok(res, response);
 		} catch (error) {
 			this.error(res, HttpStatusCode.INTERNAL_SERVER_ERROR, error);
+		}
+	};
+
+	private checkout = async (req: Request, res: Response) => {
+		try {
+			const userId = req.headers['x-user-id'] as string;
+			const { payment, delivery, comments } = req.body;
+			const order = await this.cartService.checkout({ userId, payment, delivery, comments });
+
+			const response = {
+				data: {
+					order,
+				},
+				error: null,
+			};
+			this.ok(res, response);
+		} catch (error) {
+			this.error(res, HttpStatusCode.BAD_REQUEST, error);
 		}
 	};
 }

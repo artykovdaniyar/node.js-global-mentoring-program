@@ -52,6 +52,22 @@ export class CartRepositoryArray implements CartRepository {
 		});
 	};
 
+	public checkout = async (userId: string): Promise<Cart> => {
+		return new Promise((resolve, reject) => {
+			let userCartIndex = cartsData.findIndex((item) => item.userId === userId);
+			const cart = { ...cartsData[userCartIndex] };
+
+			if (!cart.isDeleted && cart.items.length) {
+				cartsData[userCartIndex].isDeleted = true;
+				cartsData[userCartIndex].items = [];
+
+				resolve(cart);
+			} else {
+				reject(new Error(`The cart is empty. Please consider to add some products to the cart`));
+			}
+		});
+	};
+
 	public addProduct = async (dto: AddProductDto): Promise<Cart> => {
 		return new Promise(async (resolve, reject) => {
 			let userCartIndex = cartsData.findIndex((item) => item.userId === dto.userId);

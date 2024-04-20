@@ -7,6 +7,7 @@ export interface CartRepository {
 	readAll: () => Promise<Cart[]>;
 	readOne: (userId: string) => Promise<Cart>;
 	delete: (id: string) => Promise<boolean>;
+	checkout: (userId: string) => Promise<Cart>;
 	addProduct: (dto: AddProductDto) => Promise<Cart>;
 	deleteProduct: (dto: UpdateCartDto) => Promise<Cart>;
 }
