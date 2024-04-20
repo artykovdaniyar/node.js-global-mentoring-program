@@ -2,6 +2,8 @@ import { Request, Response } from 'express';
 import { BaseController } from '../common';
 import { HttpStatusCode, IControllerResponse } from '../shared';
 import { UserService, userService } from './user.service';
+import { AdminMiddleware } from '../middleware/admin.middleware';
+import { AuthMiddleware } from '../middleware/auth.middleware';
 
 export class UserController extends BaseController {
 	constructor(private userService: UserService) {
@@ -16,21 +18,26 @@ export class UserController extends BaseController {
 				path: '/',
 				method: 'post',
 				func: this.add,
+				middlewares: [new AdminMiddleware()],
 			},
+
 			{
 				path: '/:id',
 				method: 'delete',
 				func: this.remove,
+				middlewares: [new AdminMiddleware()],
 			},
 			{
 				path: '/:id/hobbies',
 				method: 'get',
 				func: this.getHobbies,
+				middlewares: [new AuthMiddleware(this.userService)],
 			},
 			{
 				path: '/:id/hobbies',
 				method: 'patch',
 				func: this.updateHobbies,
+				middlewares: [new AuthMiddleware(this.userService)],
 			},
 		]);
 	}

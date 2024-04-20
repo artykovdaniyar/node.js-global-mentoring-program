@@ -1,5 +1,6 @@
 import { NextFunction, RequestHandler, Response, Router } from 'express';
 import { IncomingMessage, ServerResponse } from 'http';
+import { IMiddleware } from './middleware.interface';
 
 export type HttpMehtods = 'get' | 'post' | 'patch' | 'delete' | 'put';
 
@@ -18,6 +19,7 @@ export interface IControllerRoute {
 	path: string;
 	func: RequestHandler;
 	method: keyof Pick<Router, HttpMehtods>;
+	middlewares?: IMiddleware[];
 }
 
 export type ExpressReturnType = Response<any, Record<string, any>>;
