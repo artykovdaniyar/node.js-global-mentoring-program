@@ -1,4 +1,4 @@
-import { userController } from './api/user';
+import { userController } from './user/user.controller';
 import { App } from './app';
 
 async function bootstrap() {

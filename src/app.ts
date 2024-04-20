@@ -1,4 +1,4 @@
-import { UserController } from './api/user';
+import { UserController } from './user/user.controller';
 import express, { Express } from 'express';
 import { Server } from 'http';
 
@@ -13,7 +13,7 @@ export class App {
 	}
 
 	useRoutes(): void {
-		this.app.use('/user', this.userController.router);
+		this.app.use('/api/users', this.userController.router);
 	}
 
 	public async init(): Promise<void> {
