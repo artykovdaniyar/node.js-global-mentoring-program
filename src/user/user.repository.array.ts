@@ -1,7 +1,8 @@
 import { v4 as uuidv4 } from 'uuid';
 import { usersData } from './userData';
 import { UserRepository } from './user.repository';
-import { AddUserPropDto, ReturnUserDto } from './dto';
+import { AddUserPropDto, ReturnUserDto, UpdateUserDto } from './dto';
+import { User } from './user.entity';
 
 export class UserRepositoryArray implements UserRepository {
 	public readAll = async (): Promise<ReturnUserDto[]> => {
@@ -10,6 +11,17 @@ export class UserRepositoryArray implements UserRepository {
 				resolve(usersData.map(({ name, email, id }) => ({ name, email, id })));
 			} else {
 				reject(new Error('Users not Found'));
+			}
+		});
+	};
+
+	public readOne = async (id: string): Promise<User> => {
+		return new Promise((resolve, reject) => {
+			const indexOfUser = usersData.findIndex((user) => user.id === id);
+			if (indexOfUser !== -1) {
+				resolve(usersData[indexOfUser]);
+			} else {
+				reject(new Error(`User with id ${id} doesn't exist`));
 			}
 		});
 	};
@@ -38,6 +50,21 @@ export class UserRepositoryArray implements UserRepository {
 				resolve(true);
 			} else {
 				reject(new Error(`User with id ${id} doesn't exist`));
+			}
+		});
+	};
+
+	public update = async (dto: UpdateUserDto): Promise<ReturnUserDto> => {
+		return new Promise((resolve, reject) => {
+			const indexToUpdate = usersData.findIndex((user) => user.id === dto.id);
+			if (indexToUpdate !== -1) {
+				const updatedUser = { ...usersData[indexToUpdate], ...dto };
+				usersData[indexToUpdate] = updatedUser;
+				const { name, email, id } = updatedUser;
+
+				resolve({ name, email, id });
+			} else {
+				reject(new Error(`User with id ${dto.id} doesn't exist`));
 			}
 		});
 	};

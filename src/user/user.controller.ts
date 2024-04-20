@@ -22,6 +22,16 @@ export class UserController extends BaseController {
 				method: 'delete',
 				func: this.remove,
 			},
+			{
+				path: '/:id/hobbies',
+				method: 'get',
+				func: this.getHobbies,
+			},
+			{
+				path: '/:id/hobbies',
+				method: 'patch',
+				func: this.updateHobbies,
+			},
 		]);
 	}
 
@@ -73,6 +83,47 @@ export class UserController extends BaseController {
 			const response = {
 				data: {
 					success: true,
+				},
+				error: null,
+			};
+			this.ok(res, response);
+		} catch (error) {
+			this.error(res, HttpStatusCode.NOT_FOUND, error);
+		}
+	};
+
+	private getHobbies = async (req: Request, res: Response) => {
+		const userId = req.params.id;
+		try {
+			const hobbies = await this.userService.getHobbies(userId);
+			const response = {
+				data: {
+					hobbies,
+					links: {
+						self: `/api/users/${userId}/hobbies`,
+						user: `/api/users/${userId}`,
+					},
+				},
+				error: null,
+			};
+			this.ok(res, response);
+		} catch (error) {
+			this.error(res, HttpStatusCode.NOT_FOUND, error);
+		}
+	};
+
+	private updateHobbies = async (req: Request, res: Response) => {
+		const { hobbies } = req.body;
+		const userId = req.params.id;
+		try {
+			const user = await this.userService.updateHobbies(userId, hobbies);
+			const response = {
+				data: {
+					user,
+					links: {
+						self: `/api/users/${user.id}`,
+						hobbies: `/api/users/${user.id}/hobbies`,
+					},
 				},
 				error: null,
 			};
