@@ -29,6 +29,18 @@ export class UserRepositoryArray implements UserRepository {
 			}
 		});
 	};
+
+	public delete = async (id: string): Promise<boolean> => {
+		return new Promise((resolve, reject) => {
+			const indexToDelete = usersData.findIndex((user) => user.id === id);
+			if (indexToDelete !== -1) {
+				usersData.splice(indexToDelete, 1);
+				resolve(true);
+			} else {
+				reject(new Error(`User with id ${id} doesn't exist`));
+			}
+		});
+	};
 }
 
 export const userRepositoryArray = new UserRepositoryArray();

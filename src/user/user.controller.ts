@@ -17,6 +17,11 @@ export class UserController extends BaseController {
 				method: 'post',
 				func: this.add,
 			},
+			{
+				path: '/:id',
+				method: 'delete',
+				func: this.remove,
+			},
 		]);
 	}
 
@@ -56,6 +61,22 @@ export class UserController extends BaseController {
 				error: null,
 			};
 			this.send(res, HttpStatusCode.CREATED, response);
+		} catch (error) {
+			this.error(res, HttpStatusCode.NOT_FOUND, error);
+		}
+	};
+
+	private remove = async (req: Request, res: Response) => {
+		const userId = req.params.id;
+		try {
+			await this.userService.remove(userId);
+			const response = {
+				data: {
+					success: true,
+				},
+				error: null,
+			};
+			this.ok(res, response);
 		} catch (error) {
 			this.error(res, HttpStatusCode.NOT_FOUND, error);
 		}

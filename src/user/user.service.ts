@@ -9,6 +9,10 @@ export class UserService {
 		return await this.userRepository.create(dto);
 	};
 
+	public remove = async (id: string): Promise<boolean> => {
+		return await this.userRepository.delete(id);
+	};
+
 	public getAll = async (): Promise<ReturnUserDto[]> => {
 		return await this.userRepository.readAll();
 	};
