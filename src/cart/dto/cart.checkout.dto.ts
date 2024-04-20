@@ -1,5 +1,5 @@
-import { OrderDeliveryDto } from 'order/dto/order.delivery.dto';
-import { OrderPaymentDto } from 'order/dto/order.payment.dto';
+import { OrderDeliveryDto } from '../../order/dto/order.delivery.dto';
+import { OrderPaymentDto } from '../../order/dto';
 
 export class CartCheckoutDto {
 	constructor(

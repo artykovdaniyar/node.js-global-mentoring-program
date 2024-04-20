@@ -1,6 +1,5 @@
-import { CartItemEntity } from 'cart/cart.entity';
-import { OrderPaymentDto } from './dto/order.payment.dto';
-import { OrderDeliveryDto } from './dto/order.delivery.dto';
+import { CartItemEntity } from '../cart/cart.entity';
+import { OrderDeliveryDto, OrderPaymentDto } from './dto';
 
 type ORDER_STATUS = 'created' | 'completed';
 

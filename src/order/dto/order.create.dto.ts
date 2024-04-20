@@ -1,4 +1,4 @@
-import { CartItemEntity } from 'cart/cart.entity';
+import { CartItemEntity } from '../../cart/cart.entity';
 import { OrderPaymentDto } from './order.payment.dto';
 import { OrderDeliveryDto } from './order.delivery.dto';
 

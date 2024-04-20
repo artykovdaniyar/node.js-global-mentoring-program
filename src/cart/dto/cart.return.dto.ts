@@ -1,4 +1,4 @@
-import { CartItemEntity } from 'cart/cart.entity';
+import { CartItemEntity } from '../cart.entity';
 
 interface ReturnCart {
 	id: string;
