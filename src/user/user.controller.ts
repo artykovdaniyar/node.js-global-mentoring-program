@@ -31,7 +31,6 @@ export class UserController extends BaseController {
 				path: '/',
 				method: 'post',
 				func: this.add,
-				middlewares: [new ValidateMiddleware(userSchema), new AdminMiddleware()],
 			},
 
 			{
