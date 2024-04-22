@@ -56,7 +56,7 @@ export class CartController extends BaseController {
 			},
 
 			{
-				path: '/',
+				path: '/checkout',
 				method: 'post',
 				func: this.checkout,
 				middlewares: [
