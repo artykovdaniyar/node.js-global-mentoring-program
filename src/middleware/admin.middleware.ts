@@ -11,6 +11,7 @@ export class AdminMiddleware implements IMiddleware {
 				data: null,
 				error: 'You must be authorized user',
 			});
+			return;
 		}
 
 		if (userId !== 'admin') {
@@ -18,6 +19,7 @@ export class AdminMiddleware implements IMiddleware {
 				data: null,
 				error: 'User is not admin',
 			});
+			return;
 		}
 		next();
 	};

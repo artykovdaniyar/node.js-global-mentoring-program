@@ -12,6 +12,7 @@ export class AuthMiddleware implements IMiddleware {
 				data: null,
 				error: 'You must be authorized user',
 			});
+			return;
 		}
 
 		let user;
@@ -22,6 +23,7 @@ export class AuthMiddleware implements IMiddleware {
 				data: null,
 				error: 'User is not authorized',
 			});
+			return;
 		}
 
 		req.body.user = user;
