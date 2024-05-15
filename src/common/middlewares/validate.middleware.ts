@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import Joi from 'joi';
-import { HttpStatusCode, IMiddleware } from '../shared';
+import { HttpStatusCode, IMiddleware } from '../../shared';
 
 export class ValidateMiddleware implements IMiddleware {
 	constructor(

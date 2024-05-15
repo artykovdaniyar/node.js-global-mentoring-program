@@ -1,12 +1,16 @@
-import { Request, Response } from 'express';
+import { NextFunction, Request, Response } from 'express';
 import Joi from 'joi';
-import { BaseController } from '../common';
-import { HttpStatusCode, IControllerResponse } from '../shared';
-import { AuthMiddleware, AdminMiddleware, ValidateMiddleware } from '../middleware';
-import { UserService, userService } from './user.service';
+
+import { BaseController } from '../../../common';
+import { userService } from '../service/user.service';
+import { IUserService } from '../service/user.service.interface';
+import { IUserController } from './user.controller.interface';
+import { HttpStatusCode, IControllerResponse } from '../../../shared';
+import { AuthMiddleware, AdminMiddleware, ValidateMiddleware } from '../../../common/middlewares';
+import { ReturnUserDto } from '../data/dto';
 
 const userSchema = Joi.object({
-	name: Joi.string().alphanum().min(3).max(30).required(),
+	name: Joi.string().min(3).max(30).required(),
 	email: Joi.string().email().required(),
 });
 
@@ -18,8 +22,8 @@ const userHobbiesSchema = Joi.object({
 	hobbies: Joi.array().items(Joi.string()).required(),
 });
 
-export class UserController extends BaseController {
-	constructor(private userService: UserService) {
+export class UserControllerRest extends BaseController implements IUserController {
+	constructor(private userService: IUserService) {
 		super();
 		this.bindRoutes([
 			{
@@ -31,6 +35,7 @@ export class UserController extends BaseController {
 				path: '/',
 				method: 'post',
 				func: this.add,
+				middlewares: [new ValidateMiddleware(userSchema)],
 			},
 
 			{
@@ -60,31 +65,30 @@ export class UserController extends BaseController {
 		]);
 	}
 
-	private getAll = async (_: Request, res: Response) => {
-		try {
-			let users: any = await this.userService.getAll();
-			users = users.map((user) => ({
-				user: { ...user },
-				links: {
-					self: `/api/users/${user.id}`,
-					hobbies: `/api/users/${user.id}/hobbies`,
-				},
-			}));
-			const response = {
-				data: users,
-				error: null,
-			};
-			this.ok(res, response);
-		} catch (error) {
-			this.error(res, HttpStatusCode.INTERNAL_SERVER_ERROR, error);
-		}
+	public getAll = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+		let users: ReturnUserDto[] = await this.userService.getAll();
+
+		const data = users.map((user) => ({
+			user: { ...user },
+			links: {
+				self: `/api/users/${user.id}`,
+				hobbies: `/api/users/${user.id}/hobbies`,
+			},
+		}));
+
+		const response = {
+			data,
+			error: null,
+		};
+		this.ok(res, response);
 	};
 
-	private add = async (req: Request, res: Response) => {
-		try {
-			const { name, email } = req.body;
+	public add = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+		const { name, email } = req.body;
 
-			const user = await this.userService.add({ name, email });
+		const user = await this.userService.add({ name, email });
+
+		if (user) {
 			const response: IControllerResponse = {
 				data: {
 					user,
@@ -96,18 +100,16 @@ export class UserController extends BaseController {
 				error: null,
 			};
 			this.send(res, HttpStatusCode.CREATED, response);
-		} catch (error) {
-			this.error(res, HttpStatusCode.NOT_FOUND, error);
 		}
 	};
 
-	private remove = async (req: Request, res: Response) => {
+	public remove = async (req: Request, res: Response) => {
 		const userId = req.params.id;
 		try {
-			await this.userService.remove(userId);
+			const result = await this.userService.remove(userId);
 			const response = {
 				data: {
-					success: true,
+					success: result,
 				},
 				error: null,
 			};
@@ -117,7 +119,7 @@ export class UserController extends BaseController {
 		}
 	};
 
-	private getHobbies = async (req: Request, res: Response) => {
+	public getHobbies = async (req: Request, res: Response) => {
 		const userId = req.params.id;
 		try {
 			const hobbies = await this.userService.getHobbies(userId);
@@ -137,26 +139,29 @@ export class UserController extends BaseController {
 		}
 	};
 
-	private updateHobbies = async (req: Request, res: Response) => {
+	public updateHobbies = async (req: Request, res: Response) => {
 		const { hobbies } = req.body;
 		const userId = req.params.id;
+
 		try {
 			const user = await this.userService.updateHobbies(userId, hobbies);
-			const response = {
-				data: {
-					user,
-					links: {
-						self: `/api/users/${user.id}`,
-						hobbies: `/api/users/${user.id}/hobbies`,
+			if (user) {
+				const response = {
+					data: {
+						user,
+						links: {
+							self: `/api/users/${user.id}`,
+							hobbies: `/api/users/${user.id}/hobbies`,
+						},
 					},
-				},
-				error: null,
-			};
-			this.ok(res, response);
+					error: null,
+				};
+				this.ok(res, response);
+			}
 		} catch (error) {
 			this.error(res, HttpStatusCode.NOT_FOUND, error);
 		}
 	};
 }
 
-export const userController = new UserController(userService);
+export const userControllerRest = new UserControllerRest(userService);

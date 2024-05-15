@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from 'express';
-import { HttpStatusCode, IMiddleware } from '../shared';
+import { HttpStatusCode, IMiddleware } from '../../shared';
 
 export class AdminMiddleware implements IMiddleware {
 	constructor() {}
@@ -9,7 +9,7 @@ export class AdminMiddleware implements IMiddleware {
 		if (!userId) {
 			res.status(HttpStatusCode.FORBIDDEN).json({
 				data: null,
-				error: 'You must be authorized user',
+				error: { message: 'You must be authorized user' },
 			});
 			return;
 		}
@@ -17,7 +17,7 @@ export class AdminMiddleware implements IMiddleware {
 		if (userId !== 'admin') {
 			res.status(HttpStatusCode.FORBIDDEN).json({
 				data: null,
-				error: 'User is not admin',
+				error: { message: 'User is not admin' },
 			});
 			return;
 		}

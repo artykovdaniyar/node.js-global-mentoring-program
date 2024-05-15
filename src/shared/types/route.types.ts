@@ -1,4 +1,4 @@
-import { NextFunction, RequestHandler, Response, Router } from 'express';
+import { RequestHandler, Response, Router } from 'express';
 import { IncomingMessage, ServerResponse } from 'http';
 import { IMiddleware } from './middleware.interface';
 

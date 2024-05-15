@@ -1,32 +1,34 @@
 import { NextFunction, Request, Response } from 'express';
-import { UserService } from '../user/user.service';
-import { HttpStatusCode, IMiddleware } from '../shared';
+import { HttpStatusCode, IMiddleware } from '../../shared';
+import { IUserService } from '../../api/user/service/user.service.interface';
 
 export class AuthMiddleware implements IMiddleware {
-	constructor(private userService: UserService) {}
+	constructor(private userService: IUserService) {}
 
 	execute = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
 		const userId = req.headers['x-user-id'];
 		if (!userId) {
 			res.status(HttpStatusCode.FORBIDDEN).json({
 				data: null,
-				error: 'You must be authorized user',
+				error: {
+					message: 'User is not authorized',
+				},
 			});
 			return;
 		}
 
-		let user;
 		try {
-			user = await this.userService.getOne(userId as string);
+			const user = await this.userService.getOne(userId as string);
+			req.body.user = user;
 		} catch (error) {
 			res.status(HttpStatusCode.UNAUTHORIZED).json({
 				data: null,
-				error: 'User is not authorized',
+				error: {
+					message: 'You must be authorized user',
+				},
 			});
-			return;
 		}
 
-		req.body.user = user;
 		next();
 	};
 }

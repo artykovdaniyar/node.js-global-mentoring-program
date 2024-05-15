@@ -1,5 +1,5 @@
-import { AddUserPropDto, ReturnUserDto, UpdateUserDto } from './dto';
-import { User } from './user.entity';
+import { AddUserPropDto, ReturnUserDto, UpdateUserDto } from '../dto';
+import User from '../user.entity';
 
 export interface UserRepository {
 	create: (dto: AddUserPropDto) => Promise<ReturnUserDto>;

@@ -1,6 +1,7 @@
-import mongoose, { Error } from 'mongoose';
+import mongoose from 'mongoose';
+import { IDBService } from './db.service.interface';
 
-export class MongoDBService {
+export class DBServiceMongoDB implements IDBService {
 	constructor(private uri: string) {}
 
 	public connect = async () => {
@@ -22,6 +23,6 @@ export class MongoDBService {
 	};
 }
 
-const uri: string = 'mongodb://localhost:27017/node-mentoring-program';
+const uri: string = process.env.DOMAIN || 'mongodb://localhost:27017/node-mentoring-program';
 
-export const mongoDBService = new MongoDBService(uri);
+export const dbServiceMongoDB = new DBServiceMongoDB(uri);
