@@ -40,6 +40,7 @@
 	"homepage": "https://github.com/artykovdaniyar/node.js-mentoring-program#readme",
 	"dependencies": {
 		"body-parser": "^1.20.2",
+		"dotenv": "^16.4.5",
 		"express": "^4.19.2",
 		"joi": "^17.12.3",
 		"mongoose": "^8.3.3",
