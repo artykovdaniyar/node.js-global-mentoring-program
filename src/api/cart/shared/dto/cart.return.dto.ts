@@ -1,8 +1,8 @@
-import { CartItemEntity } from '../cart.entity';
+import { ICartItemEntity } from '../../data/cart.entity';
 
 interface ReturnCart {
 	id: string;
-	items: CartItemEntity[];
+	items: ICartItemEntity[];
 }
 
 export class ReturnCartDto {

@@ -1,10 +1,12 @@
 import { Request, Response } from 'express';
 import Joi from 'joi';
-import { BaseController } from '../common';
-import { CartService, cartService } from './cart.service';
-import { HttpStatusCode } from '../shared';
-import { AuthMiddleware, ValidateMiddleware } from '../middleware';
-import { UserService, userService } from '../user/user.service';
+
+import { BaseController } from '../../../common';
+import { CartService, cartService } from '../service/cart.service';
+import { HttpStatusCode } from '../../../shared';
+import { AuthMiddleware, ValidateMiddleware } from '../../../common/middlewares';
+import { UserService, userService } from '../../user/service/user.service';
+import { ICartController } from './cart.controller.interface';
 
 const cartUpdateSchema = Joi.object({
 	productId: Joi.string().uuid().required(),
@@ -24,7 +26,7 @@ const cartCheckoutSchema = Joi.object({
 	comments: Joi.string().min(0).max(600),
 });
 
-export class CartController extends BaseController {
+export class CartControllerRest extends BaseController implements ICartController {
 	constructor(
 		private userService: UserService,
 		private cartService: CartService,
@@ -34,14 +36,14 @@ export class CartController extends BaseController {
 			{
 				path: '/',
 				method: 'get',
-				func: this.getUserCart,
+				func: this.getOne,
 				middlewares: [new AuthMiddleware(this.userService)],
 			},
 
 			{
 				path: '/',
 				method: 'put',
-				func: this.updateUserCart,
+				func: this.update,
 				middlewares: [
 					new ValidateMiddleware(cartUpdateSchema),
 					new AuthMiddleware(this.userService),
@@ -51,7 +53,7 @@ export class CartController extends BaseController {
 			{
 				path: '/',
 				method: 'delete',
-				func: this.emptyUserCart,
+				func: this.empty,
 				middlewares: [new AuthMiddleware(this.userService)],
 			},
 
@@ -67,7 +69,7 @@ export class CartController extends BaseController {
 		]);
 	}
 
-	private getUserCart = async (req: Request, res: Response) => {
+	public getOne = async (req: Request, res: Response): Promise<void> => {
 		try {
 			const userId = req.headers['x-user-id'] as string;
 			const cart = await this.cartService.getById(userId);
@@ -83,7 +85,7 @@ export class CartController extends BaseController {
 		}
 	};
 
-	private updateUserCart = async (req: Request, res: Response) => {
+	public update = async (req: Request, res: Response) => {
 		try {
 			const userId = req.headers['x-user-id'] as string;
 			const { productId, count } = req.body;
@@ -101,7 +103,7 @@ export class CartController extends BaseController {
 		}
 	};
 
-	private emptyUserCart = async (req: Request, res: Response) => {
+	public empty = async (req: Request, res: Response) => {
 		try {
 			const userId = req.headers['x-user-id'] as string;
 
@@ -118,7 +120,7 @@ export class CartController extends BaseController {
 		}
 	};
 
-	private checkout = async (req: Request, res: Response) => {
+	public checkout = async (req: Request, res: Response) => {
 		try {
 			const userId = req.headers['x-user-id'] as string;
 			const { payment, delivery, comments } = req.body;
@@ -137,4 +139,4 @@ export class CartController extends BaseController {
 	};
 }
 
-export const cartController = new CartController(userService, cartService);
+export const cartControllerRest = new CartControllerRest(userService, cartService);

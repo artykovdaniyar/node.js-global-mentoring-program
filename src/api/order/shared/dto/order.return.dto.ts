@@ -1,14 +1,15 @@
-import { CartItemEntity } from '../cart/cart.entity';
-import { OrderDeliveryDto, OrderPaymentDto } from './dto';
+import { OrderDeliveryDto, OrderPaymentDto } from '../dto';
 
-type ORDER_STATUS = 'created' | 'completed';
+import { ICartItemEntity } from '../../../cart/data/cart.entity';
 
-export class Order {
+export type ORDER_STATUS = 'created' | 'completed';
+
+export class OrderReturnDto {
 	constructor(
 		readonly id: string,
 		readonly userId: string,
 		readonly cartId: string,
-		readonly items: CartItemEntity[],
+		readonly items: ICartItemEntity[],
 		readonly payment: OrderPaymentDto,
 		readonly delivery: OrderDeliveryDto,
 		readonly comments: string,
