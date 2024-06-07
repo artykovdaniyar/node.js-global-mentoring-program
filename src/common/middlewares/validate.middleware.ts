@@ -15,7 +15,7 @@ export class ValidateMiddleware implements IMiddleware {
 		if (error) {
 			const response = {
 				data: null,
-				error: error.details[0].message,
+				error: { message: error.details[0].message },
 			};
 
 			res.type('application/json');
