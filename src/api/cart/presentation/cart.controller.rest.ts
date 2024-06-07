@@ -45,8 +45,8 @@ export class CartControllerRest extends BaseController implements ICartControlle
 				method: 'put',
 				func: this.update,
 				middlewares: [
-					new ValidateMiddleware(cartUpdateSchema),
 					new AuthMiddleware(this.userService),
+					new ValidateMiddleware(cartUpdateSchema),
 				],
 			},
 
@@ -62,8 +62,8 @@ export class CartControllerRest extends BaseController implements ICartControlle
 				method: 'post',
 				func: this.checkout,
 				middlewares: [
-					new ValidateMiddleware(cartCheckoutSchema),
 					new AuthMiddleware(this.userService),
+					new ValidateMiddleware(cartCheckoutSchema),
 				],
 			},
 		]);

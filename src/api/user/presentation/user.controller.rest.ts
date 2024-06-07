@@ -42,25 +42,22 @@ export class UserControllerRest extends BaseController implements IUserControlle
 				path: '/:id',
 				method: 'delete',
 				func: this.remove,
-				middlewares: [new ValidateMiddleware(userIdSchema, 'params'), new AdminMiddleware()],
+				middlewares: [new AdminMiddleware(), new ValidateMiddleware(userIdSchema, 'params')],
 			},
 			{
 				path: '/:id/hobbies',
 				method: 'get',
 				func: this.getHobbies,
 				middlewares: [
-					new ValidateMiddleware(userIdSchema, 'params'),
 					new AuthMiddleware(this.userService),
+					new ValidateMiddleware(userIdSchema, 'params'),
 				],
 			},
 			{
 				path: '/:id/hobbies',
 				method: 'patch',
 				func: this.updateHobbies,
-				middlewares: [
-					new ValidateMiddleware(userHobbiesSchema),
-					new AuthMiddleware(this.userService),
-				],
+				middlewares: [new ValidateMiddleware(userHobbiesSchema)],
 			},
 		]);
 	}

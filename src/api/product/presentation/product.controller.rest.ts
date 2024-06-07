@@ -39,7 +39,7 @@ export class ProductControllerRest extends BaseController implements IProductCon
 				path: '/',
 				method: 'post',
 				func: this.add,
-				middlewares: [new ValidateMiddleware(productSchema)],
+				middlewares: [new AuthMiddleware(this.userService), new ValidateMiddleware(productSchema)],
 			},
 		]);
 	}
