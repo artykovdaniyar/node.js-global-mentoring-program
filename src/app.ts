@@ -45,9 +45,9 @@ export class App {
 
 	public async init(): Promise<void> {
 		await this.connectDB();
-		this.useExeption();
 		this.useMiileware();
 		this.useRoutes();
+		this.useExeption();
 
 		this.server = this.app.listen(this.port);
 		console.log(`Сервер запущен на http://${this.domain}:${this.port}`);
